@@ -10,6 +10,7 @@
 - [浏览器](#browser)
 - [设计模式](#design)
 - [工程化](#package)
+- [需求实现](#implement)
 
 
 ### <span id="js"> javascript</span>
@@ -689,11 +690,54 @@ service worker：页面与网络之间增加拦截器，用来缓存和拦截请
 <summary class="question">
 实现发布订阅模式
 </summary>
+
 [链接](https://blog.csdn.net/weixin_44761091/article/details/123636899)
+
+- 定义map`{eventName:[fn1,fn2]}`存储事件和回调函数
+- `on`方法存放事件和对应回调
+- `emit`从map中找到对应事件全部触发
+
+
 </details>
 
 ### <span id="package"> 工程化</span>
 ---
+
+### <span id="implement"> 需求实现</span>
+---
+
+<details>
+<summary class="question">
+实现瀑布流
+</summary>
+
+[链接](https://blog.csdn.net/weixin_44116302/article/details/119561343)
+
+[demo](https://codesandbox.io/s/pu-bu-liu-k9u2ii)
+
+1. css： 分割数据到左右两个数组，垂直渲染（display：flex）
+2. css：容器设置`column-count: 3;`,元素设置固定宽度
+3. js: 
+- 首次渲染可以获取元素高度
+- 循环元素列表
+- 设置数组记录第一行中元素高度，从第二行起在高度数组中找到最小高度，在该元素下方设置元素left,top属性放置图片，更新数组中高度信息
+</details>
+
+<!--  -->
+<details>
+<summary class="question">
+实现虚拟列表
+</summary>
+
+[链接](https://blog.csdn.net/weixin_42232325/article/details/122560039)
+
+[demo](https://codesandbox.io/s/virtuallist-1-rp8pi?file=/src/components/VirtualList.vue)
+
+- 计算当前可视区域起始数据索引(`startIndex=Math.floor(scrollTop / this.itemSize)`)
+- 计算当前可视区域结束数据索引(`endIndex=this.start + this.visibleCount`)
+- 计算当前可视区域的数据，并渲染到页面中（`visibleData=data.slice(startIndex,endIndex)`）
+- 计算startIndex对应的数据在整个列表中的偏移位置startOffset并设置到列表上(`this.startOffset = scrollTop - (scrollTop % this.itemSize);`)
+</details>
 
 <style>
   .question {
