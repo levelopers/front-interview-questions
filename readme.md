@@ -64,7 +64,7 @@ Object和Map非常相似，两者都可以完成键-值对的设置，获取和�
 | ----------- | ----------- |----------- |
 | key命名 | 任意类型 | 1.对象的键名只能是String和 Symbol 类型 2.其他类型的键名会被转换成字符串类型 3.对象转字符串默认会调用 toString 方法。 |
 | 附加的Key    | Map没有默认的key值       |Object具有原型对象，所以它包含默认的key值，并且使用不当时会和自定义的key值产生冲突（在ES5中可以通过Object.create(null)来设置去掉默认的key值，但这种解决方法并不常用）|
-|     Key的顺序        | Map中的key值排序简单直接，一个Map对象迭代键值对、Key、Value的顺序和插入时的顺序相同         | 一般对象的键值是有顺序的，但这并不绝对，有时对象的键值排序会变得很复杂，所以最好不要依赖于插入的顺序。 |
+|     Key的顺序        | Map中的key值排序简单直接，一个Map对象迭代键值对、Key、Value的顺序和插入时的顺序相同         | 一般对象的键值是有顺序的，当键值为数字时浏览器会自动为键值排序 |
 |       大小      | Map的大小可以轻松通过size属性来获得         | Object的大小必须通过自行获取 |
 |       迭代      | Map是可迭代对象，可以轻松完成迭代         | Object没有实现迭代协议，所以无法被for...of直接迭代（但可以自行实现迭代协议，或者使用Object.keys()或Object.entries()来迭代对象的键值和实体，for...in也可以迭代Object的可枚举属性） |
 |    性能         | 频繁增减键值对时表现会更好         | 频繁增减键值对时表现较差 |
@@ -77,7 +77,8 @@ Object和Map非常相似，两者都可以完成键-值对的设置，获取和�
 <summary class="question">
 模块化发展？（cmd，amd，commonjs，esmodule）
 </summary>
-https://www.processon.com/view/link/5c8409bbe4b02b2ce492286a#map
+
+[脑图](https://www.processon.com/view/link/5c8409bbe4b02b2ce492286a#map)
 
 
 |  | IIFE | COMMONJS | AMD | CMD | ES MODULE | 
@@ -274,6 +275,8 @@ JS 异步解决方案的发展历程以及优缺点。
 
 </details>
 
+<!--  -->
+
 ### <span id="frameworks"> 框架</span>
 ---
 <details>
@@ -364,9 +367,71 @@ cacheHandlers 事件侦听器缓存
 </details>
 
 
+<details>
+<summary class="question">
+  服务端渲染优缺点
+</summary>
+
+[链接](https://www.infidigit.com/blog/server-side-rendering-vs-client-side-rendering/)
+
+优点：
+- 首屏渲染快
+- 好的搜索引擎优化
+- 对网速慢的用户友好：当js加载时可以看到完整html
+
+缺点：
+- 更多服务端负载
+- 在js加载成功之前，页面是没法进行 UI 交互的。
+- TTFB (Time To First Byte)，即第一字节时间会变长：因为 SSR 相对于 CSR 需要在服务端渲染出更对的 HTML 片段，因此加载时间会变长。
+
+</details>
+
+
 
 ### <span id="html"> html</span>
 ---
+<details>
+<summary class="question">
+搜索引擎优化方法
+</summary>
+
+[seo google](https://developers.google.com/search/docs/beginner/seo-starter-guide#appearance)
+
+1. 组织您的网站层次结构
+
+- 了解搜索引擎如何使用网址 
+- - 使用https
+- - 组织网址目录结构
+- 导航结构对搜索引擎非常重要 
+- - 使用面包屑
+- - 简洁有层次的导航栏
+
+2. 优化网站内容 
+
+- 优质内容
+- 撰写优质链接文字
+
+3. 优化图片
+
+- 使用 HTML `<img>` 或 `<picture>` 元素而不是css
+- 为img标签增加alt属性描述
+- 使用标准格式图片:JPEG、GIF、PNG
+
+4. 适配手机端 
+
+- 自适应设计
+- 链接单独移动端网站
+
+5. 推广网站
+
+- 链接社交媒体
+- 与社区网站建立联系
+
+6. 分析搜索效果和用户行为
+
+- 在相关工具中跑分（google Search Console）
+
+</details>
 
 ### <span id="css"> css</span>
 ---
@@ -411,6 +476,16 @@ https传输过程：
 
 ca证书验证过程：
 ```
+1. 浏览器接受服务器发送的证书 
+2. 从浏览器中寻找是否为信任机构
+3. 根据整数中的颁发机构在浏览器中寻找根证书
+4. 从跟整数中得到公钥
+5. 用公钥解密证书数字签名 
+6. 得到证书指纹h1和指纹算法 
+7. 用指纹算法hash浏览器接收到的证书和指纹h1对比 
+8. 检查证书的url和当前请求url
+
+
 首先从证书的内容中获取证书的颁发机构，然后从浏览器系统中去寻找此颁发机构是否为浏览器的信任机构。
 
 从证书中得知证书的颁发机构，然后从浏览器系统中去寻找此颁发机构的根证书
@@ -498,6 +573,7 @@ HTTP2.0通信都在一个连接上完成，这个连接可以承载任意数据�
 <summary class="question">
 同源和跨域解决方案
 </summary>
+
 [链接](https://blog.csdn.net/ch834301/article/details/119582822)
 
 同源策略：协议、域名、端口号都相同
@@ -684,6 +760,15 @@ service worker：页面与网络之间增加拦截器，用来缓存和拦截请
 
 </details>
 
+<details>
+<summary class="question">
+浏览器从输入网址开始经历了什么
+</summary>
+
+</details>
+
+<!--  -->
+
 ### <span id="design"> 设计模式</span>
 ---
 <details>
@@ -702,6 +787,42 @@ service worker：页面与网络之间增加拦截器，用来缓存和拦截请
 
 ### <span id="package"> 工程化</span>
 ---
+
+<details>
+<summary class="question">
+webpack 构建过程
+</summary>
+
+[链接](https://weibo.com/ttarticle/p/show?id=2309634737226558014172)
+
+1. 初始化参数阶段：合并配置参数
+
+- 这一步会从我们配置的webpack.config.js中读取到对应的配置参数和shell命令中传入的参数进行合并得到最终打包配置参数。
+
+2. 开始编译准备阶段：启动编译，注册plugin，分析入口
+
+- 通过参数创建compiler对象。我们看到官方案例中通过调用webpack(options)方法返回的是一个compiler对象。并且同时调用compiler.run()方法启动的代码进行打包。
+- 注册我们定义的webpack plugin插件。webpack插件本质上就是通过发布订阅的模式，通过compiler上监听事件。然后再打包编译过程中触发监听的事件从而添加一定的逻辑影响打包结果。
+- 根据传入的配置对象寻找对应的打包入口文件。
+
+3. 模块编译阶段：loader处理入口匹配文件后webpack编译
+
+- 根据入口文件路径分析入口文件，对于入口文件进行匹配对应的 loader进行处理入口文件。
+- 将 loader处理完成的入口文件使用 webpack进行编译。
+- 分析入口文件依赖，重复上边两个步骤编译对应依赖。
+- 如果嵌套文件存在依赖文件，递归调用依赖模块进行编译。
+- 递归编译完成后，组装一个个包含多个模块的 chunk
+
+4. 完成编译阶段：递归处理依赖输出chunks
+
+- 在递归完成后，每个引用模块通过loaders处理完成同时得到模块之间的相互依赖关系。
+- 根据上述的依赖关系，组合最终输出的chunk模块。
+
+5. 输出文件阶段：根据输出配置输出文件
+
+- 整理模块依赖关系，同时将处理后的文件输出到ouput的磁盘目录中。
+
+</details>
 
 ### <span id="implement"> 需求实现</span>
 ---
