@@ -436,8 +436,141 @@ cacheHandlers 事件侦听器缓存
 ### <span id="css"> css</span>
 ---
 
+<details>
+<summary class="question">
+介绍下 BFC 及其应用
+</summary>
+
+### 概念：
+
+Formatting context(格式化上下文)：它是页面中的一块隔离了的独立容器区域，并且有一套渲染规则，它决定了其子元素将如何定位，以及和其他元素的关系和相互作用。
+
+### 特性：
+1. 内部box会在垂直方向，一个接一个地放置。
+2. Box垂直方向的距离由margin决定，在一个BFC中，两个相邻的块级盒子的垂直外边距会产生折叠。
+3. 在BFC中，每一个盒子的左外边缘（margin-left）会触碰到容器的左边缘(border-left)（对于从右到左的格式来说，则触碰到右边缘）
+4. 形成了BFC的区域不会与float box重叠
+5. 计算BFC高度时，浮动元素也参与计算
+
+### BFC 主要的作用是：
+
+1. 清除浮动
+2. 防止同一 BFC 容器中的相邻元素间的外边距重叠问题
+
+### 创建BFC：
+
+1. body 根元素
+2. 浮动元素：float 除 none 以外的值
+3. 绝对定位元素：position (absolute、fixed)
+4. display 为 inline-block、table-cells、flex
+5. overflow 除了 visible 以外的值 (hidden、auto、scroll)
+
+</details>
+
+<!--  -->
+
+<details>
+<summary class="question">
+怎么让一个 div 水平垂直居中
+</summary>
+
+1. 父元素`display:flex`:
+```css
+div.parent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+```
+
+2. 子元素`position:absolute;transform: translate(-50%,-50%)`:
+```css
+div.parent {
+  position: relative; 
+}
+div.child {
+  position: absolute; 
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);  
+}
+```
+3. 父元素`display:table-cell;vertical-align:middle;`
+```css
+.parent {
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.child {
+  display: inline-block;
+}
+```
+
+</details>
+
+<!--  -->
+
+<details>
+<summary class="question">
+分析比较 opacity: 0、visibility: hidden、display: none 优劣和适用场
+</summary>
+
+### 区别：
+- `display: none`: (不占空间，不能点击)
+- `visibility: hidden`:（占据空间，不能点击）
+- `opacity: 0`:（占据空间，可以点击）
+- 
+|  | 特性 | 性能 | 读屏器 |
+| --- | --- | --- | --- |
+| `display: none` | 不占空间，不能点击 | 回流  | 不可以读取 |
+| `visibility: hidden` | 占据空间，不能点击 | 重绘 | 可以读取 |
+| `opacity: 0` | 占据空间，可以点击 | 重绘 | 可以读取 |
+
+</details>
+
+<!--  -->
+
+<details>
+<summary class="question">
+css预编译的优缺点
+</summary>
+
+[链接](https://blog.csdn.net/weixin_40161974/article/details/102880172)
+
+### 概念：
+预先编译处理CSS，扩展了 CSS 语言，随后经过专门的编译工具将源码转化为CSS语法。
+
+### 核心功能：
+- 嵌套（所有预编译器都支持的语法特性，也是原生CSS最让开发者头疼的问题之一）
+- 变量（增强了源码的可编程能力）
+- 运算（增强了源码的可编程能力）
+- mixin/继承（为了解决hack和代码复用）
+- 模块化（不仅更利于代码复用，同时也提高了源码的可维护性）
+
+### 优点：
+- 可以提供 CSS 缺失的样式层复用机制、减少冗余代码，提高样式代码的可维护性。大大提高了开发效率。
+
+### 缺点：
+- 预编译CSS步骤的加入，让我们开发工作流中多了一个环节，调试也变得更麻烦了
+- 预编译很容易造成后代选择器的滥用
+
+</details>
+
+
 ### <span id="network"> 网络</span>
 ---
+
+<details>
+<summary class="question">
+浏览器从输入网址开始经历了什么
+</summary>
+
+[链接](https://blog.csdn.net/weixin_45654582/article/details/121513885)
+
+
+</details>
 
 <details>
 <summary class="question">
@@ -760,13 +893,6 @@ service worker：页面与网络之间增加拦截器，用来缓存和拦截请
 
 </details>
 
-<details>
-<summary class="question">
-浏览器从输入网址开始经历了什么
-</summary>
-
-</details>
-
 <!--  -->
 
 ### <span id="design"> 设计模式</span>
@@ -823,6 +949,91 @@ webpack 构建过程
 - 整理模块依赖关系，同时将处理后的文件输出到ouput的磁盘目录中。
 
 </details>
+
+<!--  -->
+
+<details>
+<summary class="question">
+介绍下 npm 模块安装机制
+</summary>
+
+### npm 模块安装机制：
+
+1. 发出 npm install 命令
+
+2. 查询node_modules目录之中是否已经存在指定模块，若存在，不再重新安装
+
+3. 若不存在，npm 向 registry 查询模块压缩包的网址
+
+4. 下载压缩包，存放在根目录下的.npm目录里
+
+5. 解压压缩包到当前项目的node_modules目录
+
+### 原理：
+
+输入 npm install 命令并敲下回车后，会经历如下几个阶段（以 npm 5.5.1 为例）：
+
+1. 执行工程自身 preinstall
+
+当前 npm 工程如果定义了 preinstall 钩子此时会被执行。
+
+2. 确定首层依赖模块
+
+首先需要做的是确定工程中的首层依赖，也就是 dependencies 和 devDependencies 属性中直接指定的模块（假设此时没有添加 npm install 参数）。
+
+工程本身是整棵依赖树的根节点，每个首层依赖模块都是根节点下面的一棵子树，npm 会开启多进程从每个首层依赖模块开始逐步寻找更深层级的节点。
+
+3. 获取模块
+
+获取模块是一个递归的过程，分为以下几步：
+
+- 获取模块信息。在下载一个模块之前，首先要确定其版本，这是因为 package.json 中往往是 semantic version（semver，语义化版本）。此时如果版本描述文件（npm-shrinkwrap.json 或 package-lock.json）中有该模块信息直接拿即可，如果没有则从仓库获取。如 packaeg.json 中某个包的版本是 ^1.1.0，npm 就会去仓库中获取符合 1.x.x 形式的最新版本。
+- 获取模块实体。上一步会获取到模块的压缩包地址（resolved 字段），npm 会用此地址检查本地缓存，缓存中有就直接拿，如果没有则从仓库下载。
+- 查找该模块依赖，如果有依赖则回到第1步，如果没有则停止。
+
+
+4. 模块扁平化（dedupe）
+
+上一步获取到的是一棵完整的依赖树，其中可能包含大量重复模块。比如 A 模块依赖于 loadsh，B 模块同样依赖于 lodash。在 npm3 以前会严格按照依赖树的结构进行安装，因此会造成模块冗余。
+
+从 npm3 开始默认加入了一个 dedupe 的过程。它会遍历所有节点，逐个将模块放在根节点下面，也就是 node-modules 的第一层。当发现有重复模块时，则将其丢弃。
+
+5. 安装模块
+
+这一步将会更新工程中的 node_modules，并执行模块中的生命周期函数（按照 preinstall、install、postinstall 的顺序）。
+
+6. 执行工程自身生命周期
+
+当前 npm 工程如果定义了钩子此时会被执行（按照 install、postinstall、prepublish、prepare 的顺序）。
+
+
+</details>
+
+<!--  -->
+
+<details>
+<summary class="question">
+Babel 的原理
+</summary>
+
+[链接](https://www.jianshu.com/p/eb3428512eb2)
+
+Babel 是一个JavaScript编译器，主要用于将 ECMAScript 2015+ 版本的代码转换为向后兼容的 JavaScript 语法，以便能够运行在当前和旧版本的浏览器或其他环境中。
+
+![Babel流程图](https://user-images.githubusercontent.com/38830527/173578555-5ad9484d-7226-415e-922a-c2922ac82330.png)
+
+
+编译流程：
+
+1. 解析阶段：Babel 默认使用 @babel/parser 将代码转换为 AST。解析一般分为两个阶段：词法分析和语法分析。
+
+2. 转换阶段：Babel 使用 @babel/traverse 提供的方法对 AST 进行深度优先遍历，调用插件对关注节点的处理函数，按需对 AST 节点进行增删改操作。
+
+3. 生成阶段：Babel 默认使用 @babel/generator 将上一阶段处理后的 AST 转换为代码字符串。
+
+
+</details>
+
 
 ### <span id="implement"> 需求实现</span>
 ---
